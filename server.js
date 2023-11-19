@@ -101,6 +101,27 @@ const validateAlbum = (album) => {
     return schema.validate(album);
 };
 
+app.put("/api/albums/:id", (req, res) => {
+    const albumIndex = albums.findIndex(a => a._id == parseInt(req.params.id));
+    if (albumIndex > -1) {
+        const updatedAlbum = { ...albums[albumIndex], ...req.body };
+        albums[albumIndex] = updatedAlbum;
+        res.send(albums);
+    } else {
+        res.status(404).send('Album not found');
+    }
+});
+
+app.delete("/api/albums/:id", (req, res) => {
+    const albumIndex = albums.findIndex(a => a._id == parseInt(req.params.id));
+    if (albumIndex > -1) {
+        albums.splice(albumIndex, 1);
+        res.send(albums);
+    } else {
+        res.status(404).send('Album not found');
+    }
+});
+
 app.listen(3000, () => {
     console.log("Server listening on port 3000");
 });
